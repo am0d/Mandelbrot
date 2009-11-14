@@ -11,8 +11,17 @@ int main (int argc, char* argv[]) {
     while (App.IsOpened()) {
         sf::Event Event;
         while (App.GetEvent (Event)) {
-            if (Event.Type == sf::Event::Closed) {
-                App.Close ();
+            switch (Event.Type) {
+                case sf::Event::Closed:
+                    App.Close ();
+                    break;
+                case sf::Event::KeyPressed:
+                    if (Event.Key.Code == sf::Key::Escape) {
+                        App.Close ();
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
