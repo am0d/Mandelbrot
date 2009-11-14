@@ -6,7 +6,7 @@ int main (int argc, char* argv[]) {
     sf::RenderWindow App (sf::VideoMode (640, 480), "Mandelbrot");
     Mandelbrot mandelbrot (App);
 
-    mandelbrot.Generate (1);
+    mandelbrot.Generate (3);
 
     while (App.IsOpened()) {
         sf::Event Event;
