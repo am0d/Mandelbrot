@@ -36,7 +36,8 @@ void Mandelbrot::Generate (int numIterations) {
 
             bool isInside = true;
 
-            for (int n = 0; n < numIterations; n++) {
+            int n;
+            for (n = 0; n < numIterations; n++) {
                 // set Z^2
                 float zReal2 = zReal * zReal;
                 float zImg2 = zImg * zImg;
@@ -51,6 +52,12 @@ void Mandelbrot::Generate (int numIterations) {
 
             if (isInside) {
                 myImage.SetPixel (x, y, sf::Color::White);
+            }
+            else {
+                char factor = (char)((float) n / (float) (numIterations/2 - 1) * 255.0);
+                if (n < (numIterations/2 - 1)) {
+                    myImage.SetPixel (x, y, sf::Color (factor, 0, 0));
+                }
             }
         }
     }

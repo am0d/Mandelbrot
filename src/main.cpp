@@ -4,9 +4,10 @@
 
 int main (int argc, char* argv[]) {
     sf::RenderWindow App (sf::VideoMode (640, 480), "Mandelbrot");
+    App.SetFramerateLimit (10);
     Mandelbrot mandelbrot (App);
 
-    mandelbrot.Generate (3);
+    mandelbrot.Generate (50);
 
     while (App.IsOpened()) {
         sf::Event Event;
