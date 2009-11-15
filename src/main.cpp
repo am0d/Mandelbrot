@@ -1,13 +1,15 @@
+#include <iostream>
 #include "SFML/Graphics.hpp"
 
 #include "mandelbrot.hpp"
 
 int main (int argc, char* argv[]) {
-    sf::RenderWindow App (sf::VideoMode (640, 480), "Mandelbrot");
+    sf::RenderWindow App (sf::VideoMode (1024, 768), "Mandelbrot");
     App.SetFramerateLimit (10);
     Mandelbrot mandelbrot (App);
+    int numIterations = 1;
 
-    mandelbrot.Generate (50);
+    mandelbrot.Generate (numIterations);
 
     while (App.IsOpened()) {
         sf::Event Event;
@@ -21,6 +23,10 @@ int main (int argc, char* argv[]) {
                         App.Close ();
                     }
                     break;
+                case sf::Event::MouseWheelMoved:
+                    numIterations += Event.MouseWheel.Delta;
+                    numIterations = (numIterations < 0) ? 0 : numIterations;
+                    mandelbrot.Generate (numIterations);
                 default:
                     break;
             }

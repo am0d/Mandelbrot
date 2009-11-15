@@ -21,9 +21,6 @@ void Mandelbrot::Generate (int numIterations) {
     float deltaReal = (maxReal - minReal) / (myWindow.GetWidth() - 1);
     float deltaImg = (maxImg - minImg) / (myWindow.GetHeight() - 1);
 
-    std::cout << minReal << " " << maxReal << " " << deltaReal << std::endl;
-    std::cout << minImg << " " << maxImg << " " << deltaImg << std::endl;
-
     for (int y = 0; y < myImage.GetHeight (); y++) {
         float curImg = maxImg - y*deltaImg;
 
@@ -51,12 +48,15 @@ void Mandelbrot::Generate (int numIterations) {
             }
 
             if (isInside) {
-                myImage.SetPixel (x, y, sf::Color::White);
+                myImage.SetPixel (x, y, sf::Color::Black);
             }
             else {
                 char factor = (char)((float) n / (float) (numIterations/2 - 1) * 255.0);
                 if (n < (numIterations/2 - 1)) {
                     myImage.SetPixel (x, y, sf::Color (factor, 0, 0));
+                }
+                else {
+                    myImage.SetPixel (x, y, sf::Color (255, factor, factor));
                 }
             }
         }
