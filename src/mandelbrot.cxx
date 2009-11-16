@@ -75,7 +75,7 @@ void Mandelbrot::Zoom (sf::Vector2i topLeft, sf::Vector2i botRight) {
 
     newMinReal = myMinReal + std::min(topLeft.x, botRight.x)*deltaReal;
     newMaxReal = myMinReal + std::max(topLeft.x, botRight.x)*deltaReal;
-    newMaxImg = myMaxImg - std::max(topLeft.y, botRight.y)*deltaImg;
+    newMaxImg = myMaxImg - std::min(topLeft.y, botRight.y)*deltaImg;
 
     myMinReal = newMinReal;
     myMaxReal = newMaxReal;
