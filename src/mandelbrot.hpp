@@ -17,10 +17,10 @@ class Mandelbrot {
         sf::Image myImage;
         sf::Sprite mySprite;
 
-        float myMinReal;
-        float myMaxReal;
-        float myMinImg;
-        float myMaxImg;
+        double myMinReal;
+        double myMaxReal;
+        double myMinImg;
+        double myMaxImg;
 
         bool myAmDirty;
         int myNumIterations;
