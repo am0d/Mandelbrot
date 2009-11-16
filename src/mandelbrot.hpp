@@ -16,6 +16,7 @@ class Mandelbrot {
         sf::RenderWindow &myWindow;
         sf::Image myImage;
         sf::Sprite mySprite;
+        sf::String myString;
 
         double myMinReal;
         double myMaxReal;

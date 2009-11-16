@@ -1,16 +1,20 @@
 #include <iostream>
 #include <algorithm>
+#include <sstream>
 #include "mandelbrot.hpp"
 
 Mandelbrot::Mandelbrot (sf::RenderWindow &window) :
     myWindow (window),
     myImage (window.GetWidth(), window.GetHeight()),
-    mySprite (myImage) {
+    mySprite (myImage),
+    myString () {
         myMinReal = -2.0;
         myMaxReal = 1.2;
         myMaxImg = 1.05;
         myNumIterations = 50;
         myAmDirty = true;
+        myString.SetPosition (10, 10);
+        myString.SetColor (sf::Color::Blue);
 }
 
 Mandelbrot::~Mandelbrot () {
@@ -68,8 +72,13 @@ void Mandelbrot::Generate () {
 void Mandelbrot::Draw () {
     if (myAmDirty) {
         Generate ();
+        std::ostringstream text;
+        text << "Iterations: ";
+        text << myNumIterations;
+        myString.SetText (sf::Unicode::Text (text.str ()));
     }
     myWindow.Draw (mySprite);
+    myWindow.Draw (myString);
 }
 
 void Mandelbrot::Zoom (sf::Vector2i topLeft, sf::Vector2i botRight) {
