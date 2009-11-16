@@ -1,11 +1,15 @@
 #include "SFML/Graphics.hpp"
 
+struct GenerateParams {
+    int startRow;
+    int endRow;
+};
+
 class Mandelbrot {
     public:
         Mandelbrot (sf::RenderWindow &window);
         ~Mandelbrot ();
         
-        void Generate ();
         void SetNumIterations (int numIterations);
         
         void Draw ();
@@ -13,6 +17,8 @@ class Mandelbrot {
         void Reset ();
 
     private:
+        void Generate (GenerateParams params);
+
         sf::RenderWindow &myWindow;
         sf::Image myImage;
         sf::Sprite mySprite;

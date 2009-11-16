@@ -7,7 +7,7 @@ Mandelbrot::Mandelbrot (sf::RenderWindow &window) :
     myWindow (window),
     myImage (window.GetWidth(), window.GetHeight()),
     mySprite (myImage),
-    myString () {
+    myString ("Iterations: 50") {
         myMinReal = -2.0;
         myMaxReal = 1.2;
         myMaxImg = 1.05;
@@ -21,12 +21,12 @@ Mandelbrot::~Mandelbrot () {
 
 }
 
-void Mandelbrot::Generate () {
+void Mandelbrot::Generate (GenerateParams params) {
     myMinImg = myMaxImg - (myMaxReal - myMinReal) * myWindow.GetHeight()/myWindow.GetWidth();
     double deltaReal = (myMaxReal - myMinReal) / (myWindow.GetWidth() - 1);
     double deltaImg = (myMaxImg - myMinImg) / (myWindow.GetHeight() - 1);
 
-    for (int y = 0; y < myImage.GetHeight (); y++) {
+    for (int y = params.startRow; y < params.endRow; y++) {
         double curImg = myMaxImg - y*deltaImg;
 
         for (int x = 0; x < myImage.GetWidth (); x++) {
@@ -71,11 +71,11 @@ void Mandelbrot::Generate () {
 
 void Mandelbrot::Draw () {
     if (myAmDirty) {
-        Generate ();
-        std::ostringstream text;
-        text << "Iterations: ";
-        text << myNumIterations;
-        myString.SetText (sf::Unicode::Text (text.str ()));
+        // generate the 'bot
+        GenerateParams params;
+        params.startRow = 0;
+        params.endRow = myImage.GetHeight ();
+        Generate (params);
     }
     myWindow.Draw (mySprite);
     myWindow.Draw (myString);
@@ -109,4 +109,10 @@ void Mandelbrot::Reset () {
 void Mandelbrot::SetNumIterations (int numIterations) {
     myNumIterations = numIterations;
     myAmDirty = true;
+
+    // draw text on screen
+    std::ostringstream text;
+    text << "Iterations: ";
+    text << myNumIterations;
+    myString.SetText (sf::Unicode::Text (text.str ()));
 }
