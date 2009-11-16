@@ -7,7 +7,8 @@ int main (int argc, char* argv[]) {
     sf::RenderWindow App (sf::VideoMode (1024, 768), "Mandelbrot");
     App.SetFramerateLimit (10);
     Mandelbrot mandelbrot (App);
-    int numIterations = 1;
+    int numIterations = 50;
+    sf::Vector2i start; // the start of the mouse selection
 
     mandelbrot.Generate (numIterations);
 
@@ -19,14 +20,31 @@ int main (int argc, char* argv[]) {
                     App.Close ();
                     break;
                 case sf::Event::KeyPressed:
-                    if (Event.Key.Code == sf::Key::Escape) {
-                        App.Close ();
+                    switch (Event.Key.Code) {
+                        case sf::Key::Escape:
+                            App.Close ();
+                            break;
+                        case sf::Key::R:
+                            mandelbrot.Reset ();
+                            mandelbrot.Generate (numIterations);
+                            break;
+                        default:
+                            break;
                     }
                     break;
                 case sf::Event::MouseWheelMoved:
                     numIterations += Event.MouseWheel.Delta;
                     numIterations = (numIterations < 0) ? 0 : numIterations;
                     mandelbrot.Generate (numIterations);
+                    break;
+                case sf::Event::MouseButtonPressed:
+                    start.x = Event.MouseButton.X;
+                    start.y = Event.MouseButton.Y;
+                    break;
+                case sf::Event::MouseButtonReleased:
+                    mandelbrot.Zoom (start, sf::Vector2i (Event.MouseButton.X, Event.MouseButton.Y));
+                    mandelbrot.Generate (numIterations);
+                    break;
                 default:
                     break;
             }

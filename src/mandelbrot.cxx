@@ -1,11 +1,14 @@
 #include <iostream>
+#include <algorithm>
 #include "mandelbrot.hpp"
 
 Mandelbrot::Mandelbrot (sf::RenderWindow &window) :
     myWindow (window),
     myImage (window.GetWidth(), window.GetHeight()),
     mySprite (myImage) {
-
+        myMinReal = -2.0;
+        myMaxReal = 1.2;
+        myMaxImg = 1.05;
 }
 
 Mandelbrot::~Mandelbrot () {
@@ -13,19 +16,15 @@ Mandelbrot::~Mandelbrot () {
 }
 
 void Mandelbrot::Generate (int numIterations) {
-    float minReal = -2.0;
-    float maxReal = 1.2;
-    float minImg = -1.2;
-    float maxImg = minImg + (maxReal - minReal) *
-        myWindow.GetHeight()/myWindow.GetWidth();
-    float deltaReal = (maxReal - minReal) / (myWindow.GetWidth() - 1);
-    float deltaImg = (maxImg - minImg) / (myWindow.GetHeight() - 1);
+    myMinImg = myMaxImg - (myMaxReal - myMinReal) *myWindow.GetHeight()/myWindow.GetWidth();
+    float deltaReal = (myMaxReal - myMinReal) / (myWindow.GetWidth() - 1);
+    float deltaImg = (myMaxImg - myMinImg) / (myWindow.GetHeight() - 1);
 
     for (int y = 0; y < myImage.GetHeight (); y++) {
-        float curImg = maxImg - y*deltaImg;
+        float curImg = myMaxImg - y*deltaImg;
 
         for (int x = 0; x < myImage.GetWidth (); x++) {
-            float curReal = minReal + x*deltaReal;
+            float curReal = myMinReal + x*deltaReal;
 
             // set Z = c
             float zReal = curReal;
@@ -65,4 +64,26 @@ void Mandelbrot::Generate (int numIterations) {
 
 void Mandelbrot::Draw () {
     myWindow.Draw (mySprite);
+}
+
+void Mandelbrot::Zoom (sf::Vector2i topLeft, sf::Vector2i botRight) {
+    float deltaReal = (myMaxReal - myMinReal) / (myWindow.GetWidth() - 1);
+    float deltaImg = (myMaxImg - myMinImg) / (myWindow.GetHeight() - 1);
+
+    float newMinReal, newMaxReal;
+    float newMinImg, newMaxImg;
+
+    newMinReal = myMinReal + std::min(topLeft.x, botRight.x)*deltaReal;
+    newMaxReal = myMinReal + std::max(topLeft.x, botRight.x)*deltaReal;
+    newMaxImg = myMaxImg - std::max(topLeft.y, botRight.y)*deltaImg;
+
+    myMinReal = newMinReal;
+    myMaxReal = newMaxReal;
+    myMaxImg = newMaxImg;
+}
+
+void Mandelbrot::Reset () {
+    myMinReal = -2.0;
+    myMaxReal = 1.2;
+    myMaxImg = 1.05;
 }
