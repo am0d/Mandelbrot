@@ -10,8 +10,6 @@ int main (int argc, char* argv[]) {
     int numIterations = 50;
     sf::Vector2i start; // the start of the mouse selection
 
-    mandelbrot.Generate (numIterations);
-
     while (App.IsOpened()) {
         sf::Event Event;
         while (App.GetEvent (Event)) {
@@ -26,7 +24,6 @@ int main (int argc, char* argv[]) {
                             break;
                         case sf::Key::R:
                             mandelbrot.Reset ();
-                            mandelbrot.Generate (numIterations);
                             break;
                         default:
                             break;
@@ -35,7 +32,7 @@ int main (int argc, char* argv[]) {
                 case sf::Event::MouseWheelMoved:
                     numIterations += Event.MouseWheel.Delta;
                     numIterations = (numIterations < 0) ? 0 : numIterations;
-                    mandelbrot.Generate (numIterations);
+                    mandelbrot.SetNumIterations (numIterations);
                     break;
                 case sf::Event::MouseButtonPressed:
                     start.x = Event.MouseButton.X;
@@ -43,7 +40,6 @@ int main (int argc, char* argv[]) {
                     break;
                 case sf::Event::MouseButtonReleased:
                     mandelbrot.Zoom (start, sf::Vector2i (Event.MouseButton.X, Event.MouseButton.Y));
-                    mandelbrot.Generate (numIterations);
                     break;
                 default:
                     break;

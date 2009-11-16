@@ -9,14 +9,16 @@ Mandelbrot::Mandelbrot (sf::RenderWindow &window) :
         myMinReal = -2.0;
         myMaxReal = 1.2;
         myMaxImg = 1.05;
+        myNumIterations = 50;
+        myAmDirty = true;
 }
 
 Mandelbrot::~Mandelbrot () {
 
 }
 
-void Mandelbrot::Generate (int numIterations) {
-    myMinImg = myMaxImg - (myMaxReal - myMinReal) *myWindow.GetHeight()/myWindow.GetWidth();
+void Mandelbrot::Generate () {
+    myMinImg = myMaxImg - (myMaxReal - myMinReal) * myWindow.GetHeight()/myWindow.GetWidth();
     float deltaReal = (myMaxReal - myMinReal) / (myWindow.GetWidth() - 1);
     float deltaImg = (myMaxImg - myMinImg) / (myWindow.GetHeight() - 1);
 
@@ -33,7 +35,7 @@ void Mandelbrot::Generate (int numIterations) {
             bool isInside = true;
 
             int n;
-            for (n = 0; n < numIterations; n++) {
+            for (n = 0; n < myNumIterations; n++) {
                 // set Z^2
                 float zReal2 = zReal * zReal;
                 float zImg2 = zImg * zImg;
@@ -50,8 +52,8 @@ void Mandelbrot::Generate (int numIterations) {
                 myImage.SetPixel (x, y, sf::Color::Black);
             }
             else {
-                char factor = (char)((float) n / (float) (numIterations/2 - 1) * 255.0);
-                if (n < (numIterations/2 - 1)) {
+                char factor = (char)((float) n / (float) (myNumIterations/2 - 1) * 255.0);
+                if (n < (myNumIterations/2 - 1)) {
                     myImage.SetPixel (x, y, sf::Color (factor, 0, 0));
                 }
                 else {
@@ -60,9 +62,13 @@ void Mandelbrot::Generate (int numIterations) {
             }
         }
     }
+    myAmDirty = false;
 }
 
 void Mandelbrot::Draw () {
+    if (myAmDirty) {
+        Generate ();
+    }
     myWindow.Draw (mySprite);
 }
 
@@ -80,10 +86,17 @@ void Mandelbrot::Zoom (sf::Vector2i topLeft, sf::Vector2i botRight) {
     myMinReal = newMinReal;
     myMaxReal = newMaxReal;
     myMaxImg = newMaxImg;
+    myAmDirty = true;
 }
 
 void Mandelbrot::Reset () {
     myMinReal = -2.0;
     myMaxReal = 1.2;
     myMaxImg = 1.05;
+    myAmDirty = true;
+}
+
+void Mandelbrot::SetNumIterations (int numIterations) {
+    myNumIterations = numIterations;
+    myAmDirty = true;
 }

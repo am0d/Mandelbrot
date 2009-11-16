@@ -5,7 +5,8 @@ class Mandelbrot {
         Mandelbrot (sf::RenderWindow &window);
         ~Mandelbrot ();
         
-        void Generate (int numIterations);
+        void Generate ();
+        void SetNumIterations (int numIterations);
         
         void Draw ();
         void Zoom (sf::Vector2i topLeft, sf::Vector2i botRight);
@@ -20,6 +21,9 @@ class Mandelbrot {
         float myMaxReal;
         float myMinImg;
         float myMaxImg;
+
+        bool myAmDirty;
+        int myNumIterations;
 };
 
 
