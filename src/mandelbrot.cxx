@@ -21,12 +21,12 @@ Mandelbrot::~Mandelbrot () {
 
 }
 
-void Mandelbrot::Generate (GenerateParams params) {
+void Mandelbrot::Generate (int startRow, int endRow) {
     myMinImg = myMaxImg - (myMaxReal - myMinReal) * myWindow.GetHeight()/myWindow.GetWidth();
     double deltaReal = (myMaxReal - myMinReal) / (myWindow.GetWidth() - 1);
     double deltaImg = (myMaxImg - myMinImg) / (myWindow.GetHeight() - 1);
 
-    for (int y = params.startRow; y < params.endRow; y++) {
+    for (int y = startRow; y < endRow; y++) {
         double curImg = myMaxImg - y*deltaImg;
 
         for (int x = 0; x < myImage.GetWidth (); x++) {
@@ -66,16 +66,30 @@ void Mandelbrot::Generate (GenerateParams params) {
             }
         }
     }
-    myAmDirty = false;
+}
+
+void generateThread (void *data) {
+    GenerateParams* params = static_cast<GenerateParams *>(data);
+    (params->object)->Generate (params->startRow, params->endRow);
 }
 
 void Mandelbrot::Draw () {
     if (myAmDirty) {
         // generate the 'bot
-        GenerateParams params;
-        params.startRow = 0;
-        params.endRow = myImage.GetHeight ();
-        Generate (params);
+        GenerateParams topParams, botParams;
+        topParams.object = this;
+        topParams.startRow = 0;
+        topParams.endRow = myImage.GetHeight () / 2;
+        sf::Thread topThread(&generateThread, (void *)&topParams);
+        topThread.Launch ();
+        botParams.object = this;
+        botParams.startRow = topParams.endRow;
+        botParams.endRow = myImage.GetHeight ();
+        sf::Thread botThread (&generateThread, (void *)&botParams);
+        botThread.Launch();
+        topThread.Wait ();
+        botThread.Wait ();
+        myAmDirty = false;
     }
     myWindow.Draw (mySprite);
     myWindow.Draw (myString);
