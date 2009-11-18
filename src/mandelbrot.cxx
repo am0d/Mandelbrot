@@ -117,7 +117,6 @@ void Mandelbrot::Reset () {
     myMaxReal = 1.2;
     myMaxImg = 1.05;
     myAmDirty = true;
-    myNumIterations = 50;
 }
 
 void Mandelbrot::SetNumIterations (int numIterations) {

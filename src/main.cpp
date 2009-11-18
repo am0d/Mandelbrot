@@ -24,6 +24,8 @@ int main (int argc, char* argv[]) {
                             break;
                         case sf::Key::R:
                             mandelbrot.Reset ();
+                            mandelbrot.SetNumIterations (50);
+                            numIterations = 50;
                             break;
                         default:
                             break;
