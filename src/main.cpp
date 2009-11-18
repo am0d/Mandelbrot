@@ -8,7 +8,9 @@ int main (int argc, char* argv[]) {
     App.SetFramerateLimit (10);
     Mandelbrot mandelbrot (App);
     int numIterations = 50;
-    sf::Vector2i start; // the start of the mouse selection
+    sf::Vector2i start, end; // the start of the mouse selection
+    bool dragging = false;
+    sf::Color transparent (0, 0, 0, 0);   // used for drawing the inside of the zoom rect
 
     while (App.IsOpened()) {
         sf::Event Event;
@@ -20,7 +22,13 @@ int main (int argc, char* argv[]) {
                 case sf::Event::KeyPressed:
                     switch (Event.Key.Code) {
                         case sf::Key::Escape:
-                            App.Close ();
+                            if (dragging)  {
+                                dragging = false;
+                                App.SetFramerateLimit (10);
+                            }
+                            else {
+                                App.Close ();
+                            }
                             break;
                         case sf::Key::R:
                             mandelbrot.Reset ();
@@ -39,9 +47,20 @@ int main (int argc, char* argv[]) {
                 case sf::Event::MouseButtonPressed:
                     start.x = Event.MouseButton.X;
                     start.y = Event.MouseButton.Y;
+                    end = start;
+                    dragging = true;
+                    App.SetFramerateLimit (30); // so that the app doesn't lag when drawing the rect
                     break;
                 case sf::Event::MouseButtonReleased:
-                    mandelbrot.Zoom (start, sf::Vector2i (Event.MouseButton.X, Event.MouseButton.Y));
+                    if (dragging) {
+                        mandelbrot.Zoom (start, sf::Vector2i (Event.MouseButton.X, Event.MouseButton.Y));
+                        dragging = false;
+                        App.SetFramerateLimit (10);
+                    }
+                    break;
+                case sf::Event::MouseMoved:
+                    end.x = Event.MouseMove.X;
+                    end.y = Event.MouseMove.Y;
                     break;
                 default:
                     break;
@@ -52,6 +71,10 @@ int main (int argc, char* argv[]) {
        App.Clear();
 
        mandelbrot.Draw();
+       if (dragging) {
+           App.Draw (sf::Shape::Rectangle (start.x, start.y, end.x, end.y,
+                                           transparent, 1, sf::Color::Blue));
+       }
        App.Display();
     }
 
