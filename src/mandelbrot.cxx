@@ -29,7 +29,7 @@ void Mandelbrot::Generate (int startRow, int endRow) {
     for (int y = startRow; y < endRow; y++) {
         double curImg = myMaxImg - y*deltaImg;
 
-        for (int x = 0; x < myImage.GetWidth (); x++) {
+        for (unsigned int x = 0; x < myImage.GetWidth (); x++) {
             double curReal = myMinReal + x*deltaReal;
 
             // set Z = c
@@ -100,7 +100,7 @@ void Mandelbrot::Zoom (sf::Vector2i topLeft, sf::Vector2i botRight) {
     double deltaImg = (myMaxImg - myMinImg) / (myWindow.GetHeight() - 1);
 
     double newMinReal, newMaxReal;
-    double newMinImg, newMaxImg;
+    double newMaxImg;
 
     newMinReal = myMinReal + std::min(topLeft.x, botRight.x)*deltaReal;
     newMaxReal = myMinReal + std::max(topLeft.x, botRight.x)*deltaReal;
