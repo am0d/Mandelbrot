@@ -14,6 +14,7 @@ Controls:
     R   - resets the zoom and iteration levels
     Click and drag
         - zoom in on a section of the mandelbrot
+        - to cancel the zoom, press ESC before releasing the mouse button
     Middle scroll wheel
         - increase / decrease the number of iterations
 
