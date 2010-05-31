@@ -1,0 +1,6 @@
+mandelbrot = Unix('Mandelbrot')
+mandelbrot.compiler.CXX
+mandelbrot.library(['sfml-graphics', 'sfml-window', 'sfml-system', 'GLU', 'GL'])
+mandelbrot.cflag(['-pedantic', '-Wall', '-g'])
+mandelbrot.files('src')
+bit.project(mandelbrot)

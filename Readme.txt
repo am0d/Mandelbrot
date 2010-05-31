@@ -2,11 +2,11 @@ Mandelbrot
 ----------
 
 This is just a simple Mandelbrot viewer, written in c++ using an SFML front-end.
-I wrote it just to get practice with SFML, and to test out another buildit build script.
+I wrote it just to get practice with SFML, and to test out another bit build script.
 
-To compile, first download buildit from http://github.com/sahchandler/buildit/downloads.
+To compile, first download bit from http://github.com/sahchandler/bit/downloads.
 Then, run
-    python mandelbrot.py
+    bit
 in the current directory.
 
 Controls:
